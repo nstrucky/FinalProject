@@ -21,13 +21,18 @@ import java.io.IOException;
  */
 
 public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
+
+    public interface JokeRetrievalListener {
+        void onJokeRetrieved(String joke);
+    }
+
     private static MyApi myApiService = null;
     private Context context;
-    private String name;
+    private JokeRetrievalListener listener;
 
-    public EndpointsAsyncTask(String name, Context context) {
+    public EndpointsAsyncTask(Context context, JokeRetrievalListener listener) {
         this.context = context;
-        this.name = name;
+        this.listener = listener;
     }
 
     @Override
@@ -51,7 +56,6 @@ public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
         }
 
         try {
-//            return myApiService.sayHi(name).execute().getData();
             return myApiService.tellJoke().execute().getData();
         } catch (IOException e) {
             return e.getMessage();
@@ -60,6 +64,7 @@ public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
+            listener.onJokeRetrieved(result);
         Toast.makeText(context, result, Toast.LENGTH_LONG).show();
     }
 }

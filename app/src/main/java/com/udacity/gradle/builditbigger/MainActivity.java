@@ -1,5 +1,6 @@
 package com.udacity.gradle.builditbigger;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -7,8 +8,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.jokepresentation.JokeActivity;
 
-public class MainActivity extends AppCompatActivity {
+import static com.example.jokepresentation.JokeActivity.KEY_INTENT_JOKE_STRING;
+
+
+public class MainActivity extends AppCompatActivity implements
+        EndpointsAsyncTask.JokeRetrievalListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +46,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tellJoke(View view) {
-        new EndpointsAsyncTask("NICK", this).execute();
+        new EndpointsAsyncTask(this, this).execute();
     }
 
-
+    @Override
+    public void onJokeRetrieved(String joke) {
+        Intent intent = new Intent(this, JokeActivity.class);
+        intent.putExtra(KEY_INTENT_JOKE_STRING, joke);
+        startActivity(intent);
+    }
 }
