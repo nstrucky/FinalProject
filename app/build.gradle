@@ -26,6 +26,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    productFlavors {
+        free {
+            applicationIdSuffix ".free"
+            versionNameSuffix "-free"
+        }
+
+        paid {
+            applicationIdSuffix ".paid"
+            versionNameSuffix "-paid"
+        }
+    }
 }
 
 dependencies {
@@ -33,12 +45,14 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
-//    androidTestCompile 'com.android.support.test.espresso.idling:idling-concurrent:2.2.2'
-    compile 'com.android.support:appcompat-v7:25.0.0'
-    compile 'com.google.android.gms:play-services-ads:9.8.0'
+    //    androidTestCompile 'com.android.support.test.espresso.idling:idling-concurrent:2.2.2'
     compile project(path: ':backend', configuration: 'android-endpoints')
     compile project(':jokepresentation')
+    compile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+
+    freeCompile 'com.google.android.gms:play-services-ads:11.0.4'
     compile 'com.google.http-client:google-http-client-android:1.22.0'
     compile 'com.google.api-client:google-api-client:1.22.0'
+    compile 'com.android.support:support-v4:25.3.1'
 }
