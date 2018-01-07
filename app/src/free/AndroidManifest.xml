@@ -27,6 +27,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Include the AdActivity configChanges and theme. -->
+        <activity android:name=".JokeAppActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.udacity.gradle.builditbigger.MainActivity"
+                />
+        </activity>
         <!--Include the AdActivity configChanges and theme. -->
         <activity
             android:name="com.google.android.gms.ads.AdActivity"

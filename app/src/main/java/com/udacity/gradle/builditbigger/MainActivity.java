@@ -1,9 +1,11 @@
 package com.udacity.gradle.builditbigger;
 
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,8 +59,9 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onJokeRetrieved(String joke) {
         jokeString = joke; //set for ui test
-        Intent intent = new Intent(this, JokeActivity.class);
+        Intent intent = new Intent(this, JokeAppActivity.class);
         intent.putExtra(KEY_INTENT_JOKE_STRING, joke);
+
         startActivity(intent);
     }
 
