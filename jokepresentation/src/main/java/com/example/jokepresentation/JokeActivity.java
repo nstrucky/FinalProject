@@ -10,8 +10,6 @@ import static com.example.jokepresentation.JokeFragment.KEY_JOKE_STRING;
 
 public class JokeActivity extends AppCompatActivity {
 
-
-
     public static final String KEY_INTENT_JOKE_STRING = "keyIntentJokeString";
 
     @Override

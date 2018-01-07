@@ -2,11 +2,12 @@ package com.udacity.gradle.builditbigger;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.jokepresentation.JokeActivity;
 
@@ -16,9 +17,13 @@ import static com.example.jokepresentation.JokeActivity.KEY_INTENT_JOKE_STRING;
 public class MainActivity extends AppCompatActivity implements
         EndpointsAsyncTask.JokeRetrievalListener {
 
+    private JokeIdlingResource idlingResource;
+    private String jokeString; //string used for ui testing
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getIdlingResource();
         setContentView(R.layout.activity_main);
     }
 
@@ -46,13 +51,32 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void tellJoke(View view) {
-        new EndpointsAsyncTask(this, this).execute();
+        new EndpointsAsyncTask(this, this, idlingResource).execute();
     }
 
     @Override
     public void onJokeRetrieved(String joke) {
+        jokeString = joke; //set for ui test
         Intent intent = new Intent(this, JokeActivity.class);
         intent.putExtra(KEY_INTENT_JOKE_STRING, joke);
         startActivity(intent);
     }
+
+    @NonNull
+    @VisibleForTesting
+    public JokeIdlingResource getIdlingResource() {
+        if (idlingResource == null) {
+            idlingResource = new JokeIdlingResource();
+        }
+
+        return idlingResource;
+    }
+
+
+    @VisibleForTesting
+    public String getJokeString() {
+        return jokeString;
+    }
+
+
 }

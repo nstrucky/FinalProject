@@ -29,14 +29,30 @@ public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
     private static MyApi myApiService = null;
     private Context context;
     private JokeRetrievalListener listener;
+    private JokeIdlingResource idlingResource;
 
-    public EndpointsAsyncTask(Context context, JokeRetrievalListener listener) {
+    /**
+     * Although the Espresso documentation says that Espresso already waits for UI events and
+     *  default instances of AsyncTask to complete before it moves onto the next test operation.
+     *  In the example given, they create a thread to delay the message, but i won't do that here
+     *  for time's sake.
+     * @param context
+     * @param listener
+     * @param idlingResource
+     */
+    public EndpointsAsyncTask(Context context, JokeRetrievalListener listener,
+                              JokeIdlingResource idlingResource) {
         this.context = context;
         this.listener = listener;
+        this.idlingResource = idlingResource;
     }
+
 
     @Override
     protected String doInBackground(Void... params) {
+        if (idlingResource != null) {
+            idlingResource.setIdleState(false);
+        }
         if(myApiService == null) {  // Only do this once
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
@@ -62,8 +78,16 @@ public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
         }
     }
 
+    /**
+     * Again, this is not necessary given that Espresso already waits for AsyncTask, however
+     * this is just to illustrate the mechanism by which the idlingResource would operate.
+     * @param result
+     */
     @Override
     protected void onPostExecute(String result) {
+        if (idlingResource != null) {
+            idlingResource.setIdleState(true);
+        }
             listener.onJokeRetrieved(result);
         Toast.makeText(context, result, Toast.LENGTH_LONG).show();
     }
